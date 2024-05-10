@@ -1,0 +1,20 @@
+pipeline {
+    agent any
+    stages {
+        stage('Git Checkout') {
+            steps {
+                git 'https://github.com/Vamkrish2812/webhook_demo.git'
+            }
+        }
+      stage("Pushing changes to the remote server"){
+            steps {
+              script {
+                  sh """
+                  sudo scp -i /root/jenkin app.py root@flaskserver:/root
+                  sudo ssh -i /root/jenkin root@ "python3" "/root/app.py" "&"
+                  """
+                }
+            }
+        }
+    }
+}
